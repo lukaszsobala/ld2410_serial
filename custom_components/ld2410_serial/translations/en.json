@@ -1,0 +1,31 @@
+{
+  "title": "LD2410 Serial",
+  "config": {
+    "step": {
+        "user": {
+            "title": "LD2410 Data Link",
+            "description": "The serial port and baud rate for the LD2410 data link.",
+            "data": {
+                "serial_port": "Serial Port path (e.g. /dev/ttyS1)",
+                "baud_rate": "Baud Rate"
+            }
+        }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Configure LD2410 Distance and Timeout",
+        "description": "Set the maximum moving gate, static gate, and timeout for the LD2410 sensor.",
+        "data": {
+          "max_moving": "Max Moving Gate (0-8, 0.75 m increments)",
+          "max_static": "Max Static Gate (0-8, 0.75 m increments)",
+          "timeout": "Timeout (seconds)"
+        }
+      }
+    }
+  }
+}

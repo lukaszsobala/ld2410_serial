@@ -45,14 +45,16 @@ class LD2410OptionsFlowHandler(config_entries.OptionsFlow):
 
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
         """Initialize options flow."""
-        self.config_entry = config_entry
+        # Save it into a private attribute to avoid conflicting with
+        # the read-only 'config_entry' property introduced in HA 2024.4+
+        self._config_entry = config_entry
 
     async def async_step_init(self, user_input=None):
         """Manage the options."""
         if user_input is not None:
             return self.async_create_entry(title="", data=user_input)
 
-        options = self.config_entry.options
+        options = self._config_entry.options
         
         data_schema = vol.Schema({
             vol.Required(CONF_MAX_MOVING, default=options.get(CONF_MAX_MOVING, 4)): vol.All(vol.Coerce(int), vol.Range(min=0, max=8)),

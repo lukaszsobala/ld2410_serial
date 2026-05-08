@@ -8,5 +8,5 @@
   "iot_class": "local_push",
   "issue_tracker": "https://github.com/lukaszsobala/ld2410_serial/issues",
   "requirements": ["pyserial>=3.5"],
-  "version": "0.4.2"
+  "version": "0.4.3"
 }
