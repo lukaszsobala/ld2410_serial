@@ -1,0 +1,12 @@
+{
+  "domain": "ld2410_serial",
+  "name": "LD2410 Serial",
+  "documentation": "https://github.com/lukaszsobala/ld2410_serial",
+  "dependencies": [],
+  "codeowners": ["@lukaszsobala"],
+  "issue_tracker": "https://github.com/lukaszsobala/ld2410_serial/issues",
+  "requirements": ["pyserial>=3.5"],
+  "iot_class": "local_push",
+  "version": "0.4.0",
+  "config_flow": true
+}

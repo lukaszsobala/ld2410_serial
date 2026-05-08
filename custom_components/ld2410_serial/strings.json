@@ -1,0 +1,18 @@
+{
+  "title": "LD2410 Serial",
+  "config": {
+    "step": {
+        "user": {
+            "title": "LD2410 Data Link",
+            "description": "The serial port and baud rate for the LD2410 data link.",
+            "data": {
+                "serial_port": "Serial Port path (e.g. /dev/ttyS1)",
+                "baud_rate": "Baud Rate"
+            }
+        }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect"
+    }
+  }
+}
