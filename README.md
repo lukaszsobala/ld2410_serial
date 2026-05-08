@@ -19,12 +19,4 @@ Home Assistant custom component for integrating LD2410 mmWave presence sensors o
 
 Go to **Settings** -> **Devices & Services** -> **Add Integration**, then search for "LD2410 Serial". You will be prompted to provide a serial port (for example, `/dev/ttyUSB0` or `/dev/ttyS1`).
 
-## Tools
-
-The `tools/` folder includes `set_distance.py`. This script modifies LD2410 detection parameters (tested only with the HLK-LD2410B). Stop Home Assistant before running it.
-
-Detection distance is adjusted in 0.75 m increments. For example, to set both moving and static detection distance to 3 meters, run:
-
-```bash
-./tools/set_distance.py /dev/ttyS1 --moving 4 --static 4 --timeout 3
-```
+The integration supports changing the detection gates, as well as the timeout.

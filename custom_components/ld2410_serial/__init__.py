@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import serial
+import struct
 import threading
 import time
 from homeassistant.core import HomeAssistant
@@ -10,7 +11,16 @@ import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.dispatcher import dispatcher_send
 import voluptuous as vol
 
-from .const import DOMAIN, CONF_SERIAL_PORT, CONF_BAUD_RATE, DEFAULT_BAUD_RATE, UPDATE_SIGNAL
+from .const import (
+    DOMAIN, 
+    CONF_SERIAL_PORT, 
+    CONF_BAUD_RATE, 
+    DEFAULT_BAUD_RATE, 
+    UPDATE_SIGNAL,
+    CONF_MAX_MOVING,
+    CONF_MAX_STATIC,
+    CONF_TIMEOUT
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -117,9 +127,49 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data[DOMAIN][entry.entry_id]["thread"] = thread
     thread.start()
 
+    entry.async_on_unload(entry.add_update_listener(update_listener))
+
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     return True
+
+async def update_listener(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Handle options update."""
+    max_moving = entry.options.get(CONF_MAX_MOVING, 4)
+    max_static = entry.options.get(CONF_MAX_STATIC, 4)
+    timeout = entry.options.get(CONF_TIMEOUT, 5)
+
+    ser = hass.data[DOMAIN][entry.entry_id].get("serial")
+    if not ser:
+         return
+    
+    def apply_config():
+        try:
+            _LOGGER.info("Applying LD2410 config -> Moving: %s, Static: %s, Timeout: %ss", max_moving, max_static, timeout)
+            # Enable Configuration Mode
+            ser.write(b'\xfd\xfc\xfb\xfa\x04\x00\xff\x00\x01\x00\x04\x03\x02\x01')
+            time.sleep(0.1)
+            
+            # Write max distance and timeout
+            config_value = struct.pack("<H H H H H H H H H",
+                0x0000, max_moving, 0x0000,
+                0x0001, max_static, 0x0000,
+                0x0002, timeout, 0x0000
+            )
+            length_bytes = struct.pack("<H", 2 + len(config_value))
+            packet = b'\xfd\xfc\xfb\xfa' + length_bytes + b'\x60\x00' + config_value + b'\x04\x03\x02\x01'
+            ser.write(packet)
+            time.sleep(0.1)
+
+            # Disable Configuration Mode
+            ser.write(b'\xfd\xfc\xfb\xfa\x02\x00\xfe\x00\x04\x03\x02\x01')
+            time.sleep(0.1)
+
+            ser.reset_input_buffer()
+        except Exception as e:
+            _LOGGER.error("Failed to update LD2410 settings: %s", e)
+
+    await hass.async_add_executor_job(apply_config)
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
