@@ -7,7 +7,7 @@ Home Assistant custom component for integrating LD2410 mmWave presence sensors o
 ### HACS
 
 1. Open HACS in Home Assistant.
-2. Search for "LD2410 Serial Radar" and install.
+2. Search for "LD2410 Serial" and install.
 3. Restart Home Assistant.
 
 ### Manual
@@ -17,7 +17,7 @@ Home Assistant custom component for integrating LD2410 mmWave presence sensors o
 
 ## Configuration
 
-Go to **Settings** -> **Devices & Services** -> **Add Integration**, then search for "LD2410 Serial Radar". You will be prompted to provide a serial port (for example, `/dev/ttyUSB0` or `/dev/ttyS1`).
+Go to **Settings** -> **Devices & Services** -> **Add Integration**, then search for "LD2410 Serial". You will be prompted to provide a serial port (for example, `/dev/ttyUSB0` or `/dev/ttyS1`).
 
 ## Tools
 
