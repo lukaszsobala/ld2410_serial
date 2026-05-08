@@ -14,6 +14,8 @@ from .const import DOMAIN, CONF_SERIAL_PORT, CONF_BAUD_RATE, DEFAULT_BAUD_RATE, 
 
 _LOGGER = logging.getLogger(__name__)
 
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
+
 PLATFORMS = ["sensor", "binary_sensor"]
 
 HEADER = b'\xf4\xf3\xf2\xf1'
